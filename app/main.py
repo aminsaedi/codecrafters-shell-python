@@ -15,6 +15,8 @@ def main():
     match command:
         case "exit":
             sys.exit(0 if not args else int(args[0]))
+        case "echo":
+            sys.stdout.write(" ".join(args) + "\n")
         case _:
             sys.stdout.write(input_str + ": command not found\n")
 
