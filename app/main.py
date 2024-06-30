@@ -1,4 +1,5 @@
 import sys
+from .commands import run_command
 
 
 def main():
@@ -12,15 +13,7 @@ def main():
     command = splitted[0]
     args = splitted[1:]
 
-    match command:
-        case "exit":
-            sys.exit(0 if not args else int(args[0]))
-        case "echo":
-            sys.stdout.write(" ".join(args) + "\n")
-        case _:
-            sys.stdout.write(input_str + ": command not found\n")
-
-    sys.stdout.flush()
+    run_command(command, args)
 
 if __name__ == "__main__":
     while True:
