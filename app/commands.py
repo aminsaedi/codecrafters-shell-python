@@ -44,8 +44,27 @@ def app_cd(args):
     global pwd
     if not args:
         return
-    if args[0] == "..":
-        pwd = os.path.dirname(pwd)
+    if "../" in args[0]:
+        for _ in args[0].split("/"):
+            new_pwd = pwd
+            if _ == "..":
+                pwd = pwd.rsplit("/", 1)[0]
+            else:
+                new_pwd = os.path.join(pwd, _)
+                if os.path.isdir(new_pwd):
+                    pwd = new_pwd
+                else:
+                    sys.stdout.write(
+                        "cd: " + _ + ": No such file or directory\n")
+    elif args[0].startswith("./"):
+        new_pwd = os.path.join(pwd, args[0][2:])
+        if os.path.isdir(new_pwd):
+            pwd = new_pwd
+        else:
+            sys.stdout.write("cd: " + args[0] +
+                             ": No such file or directory\n")
+    elif args[0] == "..":
+        pwd = pwd.rsplit("/", 1)[0]
     elif args[0] == "~":
         pwd = os.path.expanduser("~")
     else:
