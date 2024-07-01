@@ -3,13 +3,20 @@ import os
 import subprocess
 import shutil
 
+
 def app_exit(args):
     sys.exit(0 if not args else int(args[0]))
+
+
 app_exit.type = "shell builtin"
+
 
 def app_echo(args):
     sys.stdout.write(" ".join(args) + "\n")
+
+
 app_echo.type = "shell builtin"
+
 
 def app_type(args):
     if args[0] in commands:
@@ -18,7 +25,13 @@ def app_type(args):
         sys.stdout.write(args[0] + " is " + path + "\n")
     else:
         sys.stdout.write(args[0] + ": not found\n")
+
+
 app_type.type = "shell builtin"
+
+
+def app_pwd(args):
+    sys.stdout.write(os.getcwd() + "\n")
 
 
 def run_executable(command, args):
@@ -28,12 +41,13 @@ def run_executable(command, args):
         sys.stdout.write(command + ": command not found\n")
 
 
-
 commands = {
-        "exit": app_exit,
-        "echo": app_echo,
-        "type": app_type
-        }
+    "exit": app_exit,
+    "echo": app_echo,
+    "type": app_type,
+    "pwd": app_pwd
+}
+
 
 def run_command(command, args):
     if command in commands:
