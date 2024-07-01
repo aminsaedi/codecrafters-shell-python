@@ -4,6 +4,9 @@ import subprocess
 import shutil
 
 
+pwd = os.getcwd()
+
+
 def app_exit(args):
     sys.exit(0 if not args else int(args[0]))
 
@@ -31,10 +34,30 @@ app_type.type = "shell builtin"
 
 
 def app_pwd(args):
-    sys.stdout.write(os.getcwd() + "\n")
+    sys.stdout.write(pwd + "\n")
 
 
 app_pwd.type = "shell builtin"
+
+
+def app_cd(args):
+    global pwd
+    if not args:
+        return
+    if args[0] == "..":
+        pwd = os.path.dirname(pwd)
+    elif args[0] == "~":
+        pwd = os.path.expanduser("~")
+    else:
+        new_pwd = os.path.join(pwd, args[0])
+        if os.path.isdir(new_pwd):
+            pwd = new_pwd
+        else:
+            sys.stdout.write("cd: " + args[0] +
+                             ": No such file or directory\n")
+
+
+app_cd.type = "shell builtin"
 
 
 def run_executable(command, args):
@@ -48,7 +71,8 @@ commands = {
     "exit": app_exit,
     "echo": app_echo,
     "type": app_type,
-    "pwd": app_pwd
+    "pwd": app_pwd,
+    "cd": app_cd
 }
 
 
